@@ -2,7 +2,7 @@ export const faqData = [
   {
     id: 1,
     question: "What are your shipping options and delivery times?",
-    answer: "We offer free standard shipping (5-7 business days) on orders over $50. Express shipping (2-3 business days) is available for $9.99, and overnight delivery for $19.99. All orders are processed within 24 hours on business days."
+    answer: "We offer free standard shipping (5-10 business days) on orders over $50. Express shipping (2-3 business days) is available for $9.99, and overnight delivery for $19.99. All orders are processed within 24 hours on business days."
   },
   {
     id: 2,
