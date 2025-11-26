@@ -3,14 +3,16 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import { useCart } from '../context/CartContext';
-import { 
-  ShoppingCart, 
-  Search, 
-  Menu, 
-  X, 
-  Sun, 
+import { useAuth } from '../context/AuthContext';
+import {
+  ShoppingCart,
+  Search,
+  Menu,
+  X,
+  Sun,
   Moon,
-  Zap
+  Zap,
+  Settings
 } from 'lucide-react';
 
 const Navbar = () => {
@@ -19,6 +21,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { isDark, toggleTheme } = useTheme();
   const { getTotalItems } = useCart();
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -96,6 +99,24 @@ const Navbar = () => {
                 )}
               </Link>
             ))}
+            {user && (
+              <Link
+                to="/admin"
+                className={`relative px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive('/admin')
+                    ? 'text-primary-500'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-primary-500'
+                }`}
+              >
+                <Settings className="h-5 w-5" />
+                {isActive('/admin') && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500"
+                  />
+                )}
+              </Link>
+            )}
           </div>
 
           {/* Search Bar */}
@@ -212,6 +233,20 @@ const Navbar = () => {
                     {link.label}
                   </Link>
                 ))}
+                {user && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-base font-medium transition-colors ${
+                      isActive('/admin')
+                        ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-500'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    <Settings className="h-5 w-5" />
+                    <span>Admin</span>
+                  </Link>
+                )}
               </div>
 
               {/* Mobile Theme Toggle */}

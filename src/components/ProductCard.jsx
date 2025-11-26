@@ -51,7 +51,7 @@ const ProductCard = ({ product, index = 0 }) => {
               <div className="absolute inset-0 shimmer rounded-t-xl" />
             )}
             <img
-              src={product.image}
+              src={product.imageUrl || product.image}
               alt={product.name}
               className={`w-full h-48 object-cover transition-all duration-500 group-hover:scale-110 ${
                 isImageLoaded ? 'opacity-100' : 'opacity-0'

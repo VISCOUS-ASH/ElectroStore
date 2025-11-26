@@ -3,13 +3,17 @@ import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Filter, Search, Grid, List, SlidersHorizontal, X } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { products, categories } from '../data/products';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+import { categories, products as localProducts } from '../data/products';
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('name');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     category: searchParams.get('category') || '',
     brand: '',
@@ -18,7 +22,7 @@ const Products = () => {
     search: searchParams.get('search') || ''
   });
 
-  const brands = [...new Set(products.map(product => product.brand))];
+  const brands = [...new Set(products.map(product => product.brand).filter(Boolean))];
   const priceRanges = [
     { label: 'Under $50', value: '0-50' },
     { label: '$50 - $200', value: '50-200' },
@@ -35,6 +39,34 @@ const Products = () => {
     { label: 'Newest', value: 'newest' }
   ];
 
+  // Fetch products from Firestore, fallback to local data
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'products'));
+        const productsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        console.log('Firestore products count:', productsData.length);
+        console.log('Local products count:', localProducts.length);
+        
+        if (productsData.length > 0) {
+          console.log('Using Firestore data');
+          setProducts(productsData);
+        } else {
+          console.log('Using local data');
+          setProducts(localProducts);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        console.log('Using local data due to error');
+        setProducts(localProducts);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   // Update filters when URL params change
   useEffect(() => {
     setFilters(prev => ({
@@ -46,6 +78,7 @@ const Products = () => {
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
+    console.log('Starting filter with products:', products.length, 'filters:', filters);
     let filtered = products.filter(product => {
       // Category filter
       if (filters.category && product.category !== filters.category) return false;
@@ -74,6 +107,7 @@ const Products = () => {
       
       return true;
     });
+    console.log('Filtered products count:', filtered.length);
 
     // Sort products
     filtered.sort((a, b) => {
@@ -343,13 +377,22 @@ const Products = () => {
               className="mb-6"
             >
               <p className="text-gray-600 dark:text-gray-300">
-                Showing {filteredProducts.length} of {products.length} products
+                {loading ? 'Loading products...' : `Showing ${filteredProducts.length} of ${products.length} products`}
               </p>
             </motion.div>
 
             {/* Products */}
             <AnimatePresence mode="wait">
-              {filteredProducts.length > 0 ? (
+              {loading ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-12"
+                >
+                  <div className="text-6xl mb-4">⏳</div>
+                  <p className="text-gray-600 dark:text-gray-300">Loading products...</p>
+                </motion.div>
+              ) : filteredProducts.length > 0 ? (
                 <motion.div
                   key="products"
                   initial={{ opacity: 0 }}
