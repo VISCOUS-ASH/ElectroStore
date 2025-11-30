@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from 'mongoose'
-import bcryptjs from 'bcryptjs'
 
 export interface IUser extends Document {
   username: string
@@ -52,6 +51,7 @@ UserSchema.pre('save', async function (next) {
   }
 
   try {
+    const bcryptjs = (await import('bcryptjs')).default
     const salt = await bcryptjs.genSalt(10)
     this.password = await bcryptjs.hash(this.password, salt)
     next()
@@ -61,6 +61,7 @@ UserSchema.pre('save', async function (next) {
 })
 
 UserSchema.methods.comparePassword = async function (password: string) {
+  const bcryptjs = (await import('bcryptjs')).default
   return await bcryptjs.compare(password, this.password)
 }
 
