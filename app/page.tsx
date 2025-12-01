@@ -367,8 +367,9 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed italic">
-                  "{testimonial.comment}"
-                </p>
+  {`"${testimonial.comment}"`}
+</p>
+
                 <div className="flex items-center gap-4">
                   <div className="text-4xl">{testimonial.avatar}</div>
                   <div>

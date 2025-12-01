@@ -263,9 +263,10 @@ export default function FAQ() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-12"
             >
-              <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
-                No results found for "{searchQuery}"
-              </p>
+             <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
+  {`No results found for "${searchQuery}"`}
+</p>
+
               <button
                 onClick={() => {
                   setSearchQuery('')
