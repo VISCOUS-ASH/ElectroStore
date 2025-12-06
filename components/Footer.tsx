@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Mail, Phone, MapPin } from 'lucide-react'
+import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -83,12 +83,22 @@ export default function Footer() {
             <p className="text-gray-400 text-sm">
               &copy; 2024 ElectroStore. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <div className="flex space-x-6 mt-4 md:mt-0 items-center">
               <a href="#" className="text-gray-400 hover:text-white text-sm">
                 Privacy Policy
               </a>
               <a href="#" className="text-gray-400 hover:text-white text-sm">
                 Terms of Service
+              </a>
+              <a
+                href="https://wa.me/919335138822"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                title="Chat with us on WhatsApp"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Chat on WhatsApp
               </a>
             </div>
           </div>

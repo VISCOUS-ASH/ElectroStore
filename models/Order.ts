@@ -110,11 +110,15 @@ const OrderSchema = new Schema<IOrder>(
 )
 
 OrderSchema.pre('save', async function (next) {
-  if (this.isNew && !this.orderNumber) {
-    const count = await mongoose.model('Order').countDocuments()
-    this.orderNumber = `ORD-${Date.now()}-${count + 1}`
+  try {
+    if (this.isNew && !this.orderNumber) {
+      const count = await mongoose.model('Order').countDocuments()
+      this.orderNumber = `ORD-${Date.now()}-${count + 1}`
+    }
+    next()
+  } catch (error) {
+    next(error as Error)
   }
-  next()
 })
 
 export default mongoose.models.Order ||

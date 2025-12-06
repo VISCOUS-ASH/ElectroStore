@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Facebook, Twitter, Linkedin, Instagram, MessageCircle } from 'lucide-react'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -35,21 +35,29 @@ export default function Contact() {
     {
       icon: Mail,
       title: 'Email',
-      details: 'support@electrostore.com',
+      details: 'akshatkumarskt@gmail.com',
       description: 'We typically respond within 24 hours',
       color: 'from-blue-500 to-blue-600',
     },
     {
+      icon: MessageCircle,
+      title: 'WhatsApp',
+      details: '+91 93351 38822',
+      description: 'Instant messaging for quick support',
+      color: 'from-green-500 to-green-600',
+      link: 'https://wa.me/919335138822',
+    },
+    {
       icon: Phone,
       title: 'Phone',
-      details: '+1 (555) 123-4567',
-      description: 'Call us Monday to Friday, 9AM-6PM EST',
-      color: 'from-green-500 to-green-600',
+      details: '+91 93351 38822',
+      description: 'Call us for immediate assistance',
+      color: 'from-orange-500 to-orange-600',
     },
     {
       icon: MapPin,
       title: 'Office',
-      details: '123 Electronics Ave, Tech City, TC 12345',
+      details: 'Shaktinagar, Sonebhadra',
       description: 'Visit us at our headquarters',
       color: 'from-purple-500 to-purple-600',
     },
@@ -69,7 +77,7 @@ export default function Contact() {
     },
     {
       q: 'Do you offer phone support?',
-      a: 'Yes, our team is available Monday-Friday, 9AM-6PM EST.',
+      a: 'Yes, our team is available for immediate assistance. Feel free to call us at +91 93351 38822.',
     },
     {
       q: 'How can I track my order?',
@@ -123,10 +131,35 @@ export default function Contact() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
           >
             {contactMethods.map((method, index) => {
               const Icon = method.icon
+              const content = (
+                <>
+                  <Icon className="w-12 h-12 mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">{method.title}</h3>
+                  <p className="text-white/90 mb-2 font-semibold">{method.details}</p>
+                  <p className="text-white/70">{method.description}</p>
+                </>
+              )
+              
+              if (method.link) {
+                return (
+                  <motion.a
+                    key={index}
+                    variants={itemVariants}
+                    href={method.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -8 }}
+                    className={`bg-gradient-to-br ${method.color} p-8 rounded-2xl text-white shadow-lg hover:shadow-xl transition-all block cursor-pointer`}
+                  >
+                    {content}
+                  </motion.a>
+                )
+              }
+              
               return (
                 <motion.div
                   key={index}
@@ -134,10 +167,7 @@ export default function Contact() {
                   whileHover={{ y: -8 }}
                   className={`bg-gradient-to-br ${method.color} p-8 rounded-2xl text-white shadow-lg hover:shadow-xl transition-all`}
                 >
-                  <Icon className="w-12 h-12 mb-4" />
-                  <h3 className="text-2xl font-bold mb-2">{method.title}</h3>
-                  <p className="text-white/90 mb-2 font-semibold">{method.details}</p>
-                  <p className="text-white/70">{method.description}</p>
+                  {content}
                 </motion.div>
               )
             })}
@@ -348,14 +378,26 @@ export default function Contact() {
           <p className="text-xl text-blue-100 mb-8">
             Don&apos;t hesitate to reach out. Our team is always happy to help!
           </p>
-          <motion.a
-            whileHover={{ scale: 1.05 }}
-            href="#"
-            className="inline-flex items-center gap-2 bg-white text-blue-600 px-10 py-4 rounded-lg font-bold hover:bg-blue-50 transition-all shadow-lg"
-          >
-            <Mail className="w-5 h-5" />
-            Email Us
-          </motion.a>
+          <div className="flex gap-4">
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              href="mailto:akshatkumarskt@gmail.com"
+              className="inline-flex items-center gap-2 bg-white text-blue-600 px-10 py-4 rounded-lg font-bold hover:bg-blue-50 transition-all shadow-lg"
+            >
+              <Mail className="w-5 h-5" />
+              Email Us
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              href="https://wa.me/919335138822"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-green-500 text-white px-10 py-4 rounded-lg font-bold hover:bg-green-600 transition-all shadow-lg"
+            >
+              <MessageCircle className="w-5 h-5" />
+              WhatsApp Us
+            </motion.a>
+          </div>
         </motion.div>
       </section>
     </div>

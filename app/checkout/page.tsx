@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/store/cartStore'
+import { useToast } from '@/components/ToastProvider'
 import { motion } from 'framer-motion'
 
 export default function Checkout() {
   const router = useRouter()
   const { items, getTotalPrice, clearCart } = useCart()
+  const { addToast } = useToast()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     firstName: '',
@@ -34,6 +36,7 @@ export default function Checkout() {
       const totalPrice = getTotalPrice() * 1.18
       const orderData = {
         items: items.map((item) => ({
+          productId: item.id,
           name: item.name,
           price: item.price,
           quantity: item.quantity,
@@ -59,11 +62,16 @@ export default function Checkout() {
       if (res.ok) {
         const data = await res.json()
         clearCart()
-        router.push(`/order-success?orderNumber=${data.data.orderNumber}`)
+        addToast(`Order placed successfully! Order #${data.data.orderNumber}`, 'success', 4000)
+        setTimeout(() => {
+          router.push(`/order-success?orderNumber=${data.data.orderNumber}`)
+        }, 500)
+      } else {
+        addToast('Failed to place order. Please try again.', 'error')
       }
     } catch (error) {
       console.error('Error placing order:', error)
-      alert('Error placing order. Please try again.')
+      addToast('Error placing order. Please try again.', 'error')
     } finally {
       setLoading(false)
     }

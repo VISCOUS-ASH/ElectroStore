@@ -25,21 +25,24 @@ export async function POST(request: NextRequest) {
 
     await connectToDatabase()
 
+    if (!body.orderNumber) {
+      const count = await Order.countDocuments()
+      body.orderNumber = `ORD-${Date.now()}-${count + 1}`
+    }
+
     const order = await Order.create(body)
 
-    try {
-      await sendOrderNotifications({
-        orderNumber: order.orderNumber,
-        items: body.items,
-        customerInfo: body.customerInfo,
-        subtotal: body.subtotal,
-        tax: body.tax,
-        shipping: body.shipping,
-        totalPrice: body.totalPrice,
-      })
-    } catch (emailError) {
+    sendOrderNotifications({
+      orderNumber: order.orderNumber,
+      items: body.items,
+      customerInfo: body.customerInfo,
+      subtotal: body.subtotal,
+      tax: body.tax,
+      shipping: body.shipping,
+      totalPrice: body.totalPrice,
+    }).catch((emailError) => {
       console.error('Failed to send order notifications:', emailError)
-    }
+    })
 
     return NextResponse.json(
       { success: true, data: order },
@@ -47,8 +50,9 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     console.error('Error creating order:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create order'
     return NextResponse.json(
-      { success: false, error: 'Failed to create order' },
+      { success: false, error: errorMessage },
       { status: 500 }
     )
   }

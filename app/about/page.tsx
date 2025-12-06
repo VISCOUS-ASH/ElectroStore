@@ -228,7 +228,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
+      {/* <section className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -261,7 +261,7 @@ export default function About() {
             ))}
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       <section className="py-20 px-4 bg-white dark:bg-gray-900">
         <div className="max-w-5xl mx-auto">
