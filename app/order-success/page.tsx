@@ -1,4 +1,6 @@
-'use client'
+// app/order-success/page.jsx
+'use client'                                    // MUST be the very first line
+export const dynamic = 'force-dynamic'         // prevent static prerendering
 
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -18,7 +20,7 @@ export default function OrderSuccess() {
         <p className="text-gray-600 dark:text-gray-400 mb-4">
           Thank you for your purchase. Your order has been successfully placed.
         </p>
-        
+
         {orderNumber && (
           <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6">
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
