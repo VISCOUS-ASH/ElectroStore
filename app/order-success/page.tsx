@@ -1,12 +1,12 @@
 // app/order-success/page.jsx
-'use client'                                    // MUST be the very first line
-export const dynamic = 'force-dynamic'         // prevent static prerendering
+'use client'
 
+import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle } from 'lucide-react'
 
-export default function OrderSuccess() {
+function OrderSuccessContent() {
   const searchParams = useSearchParams()
   const orderNumber = searchParams?.get('orderNumber')
 
@@ -52,5 +52,17 @@ export default function OrderSuccess() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function OrderSuccess() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center py-12 px-4">
+        <div className="text-center">Loading...</div>
+      </div>
+    }>
+      <OrderSuccessContent />
+    </Suspense>
   )
 }
