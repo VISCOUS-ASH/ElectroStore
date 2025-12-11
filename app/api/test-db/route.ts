@@ -1,45 +1,23 @@
-// app/api/check-db/route.ts
+// app/api/test-connection/route.ts
 import { NextResponse } from 'next/server'
-import { connectToDatabase } from '@/lib/mongodb'
 
 export async function GET() {
-  try {
-    const { db } = await connectToDatabase()
-    
-    // List all collections
-    const collections = await db.listCollections().toArray()
-    
-    // Check each collection for documents
-    const collectionStats = await Promise.all(
-      collections.map(async (collection) => {
-        const coll = db.collection(collection.name)
-        const count = await coll.countDocuments()
-        const sample = await coll.find({}).limit(2).toArray()
-        
-        return {
-          name: collection.name,
-          count,
-          sample: sample.map(doc => ({
-            _id: doc._id,
-            name: doc.name || 'No name field',
-            ...(doc.title && { title: doc.title }),
-            ...(doc.price && { price: doc.price })
-          }))
-        }
-      })
-    )
-    
-    return NextResponse.json({
-      success: true,
-      database: db.databaseName,
-      collections: collectionStats,
-      totalCollections: collections.length
-    })
-    
-  } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      error: error.message
-    }, { status: 500 })
-  }
+  return NextResponse.json({
+    success: true,
+    message: 'API is working',
+    environment: {
+      NODE_ENV: process.env.NODE_ENV,
+      VERCEL_ENV: process.env.VERCEL_ENV,
+      hasMongoDBUri: !!process.env.MONGODB_URI,
+      mongoUriLength: process.env.MONGODB_URI?.length || 0,
+      nextauthUrl: process.env.NEXTAUTH_URL,
+      timestamp: new Date().toISOString()
+    },
+    endpoints: {
+      checkDb: '/api/check-db',
+      testConnection: '/api/test-connection', 
+      products: '/api/products',
+      seedProducts: '/api/seed-products (POST)'
+    }
+  })
 }
