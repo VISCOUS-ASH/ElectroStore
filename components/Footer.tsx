@@ -11,7 +11,7 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold mb-4">ElectroStore</h3>
             <p className="text-gray-400">
-              Your trusted destination for premium electronics with fast delivery and exceptional customer service.
+              Your trusted destination for premium electronics with fast delivery and exceptional customer services.
             </p>
           </div>
 
